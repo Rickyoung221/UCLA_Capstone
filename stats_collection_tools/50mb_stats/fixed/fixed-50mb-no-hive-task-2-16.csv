@@ -1,0 +1,25 @@
+TimeStamp,Container,Name,CPUPerc,MemUsage,MemPerc,NetIO,BlockIO,PIDs
+2025-03-12 00:57:35,7941f509fee6,hdfs-spark-hive-docker-history-1,0.18%,1012MiB / 23.47GiB,4.21%,30.2MB / 1.46MB,0B / 0B,100
+2025-03-12 00:57:35,ec0defcd48e4,hdfs-spark-hive-docker-worker1-1,0.55%,1.867GiB / 23.47GiB,7.96%,767MB / 428MB,0B / 0B,244
+2025-03-12 00:57:35,13bff8c591b1,hdfs-spark-hive-docker-worker2-1,0.58%,1.885GiB / 23.47GiB,8.03%,772MB / 470MB,0B / 0B,245
+2025-03-12 00:57:35,a3d3766552e1,hdfs-spark-hive-docker-master-1,1.14%,2.11GiB / 23.47GiB,8.99%,51.7MB / 722MB,0B / 0B,424
+2025-03-12 00:57:35,51fe5cb98b94,hdfs-spark-hive-docker-metastore-1,0.00%,62.7MiB / 23.47GiB,0.26%,3.74MB / 4.03MB,0B / 0B,27
+2025-03-12 00:57:35,ALL,All Containers,2.45%,6.91GiB / 23.47GiB,29.45%,1.62GB / 1.63GB,0B / 0B,1040
+2025-03-12 00:57:46,7941f509fee6,hdfs-spark-hive-docker-history-1,0.14%,1012MiB / 23.47GiB,4.21%,30.2MB / 1.46MB,0B / 0B,100
+2025-03-12 00:57:46,ec0defcd48e4,hdfs-spark-hive-docker-worker1-1,1.90%,1.868GiB / 23.47GiB,7.96%,770MB / 428MB,0B / 0B,243
+2025-03-12 00:57:46,13bff8c591b1,hdfs-spark-hive-docker-worker2-1,153.22%,2.069GiB / 23.47GiB,8.81%,775MB / 473MB,0B / 0B,278
+2025-03-12 00:57:46,a3d3766552e1,hdfs-spark-hive-docker-master-1,120.59%,2.57GiB / 23.47GiB,10.95%,51.7MB / 725MB,0B / 0B,514
+2025-03-12 00:57:46,51fe5cb98b94,hdfs-spark-hive-docker-metastore-1,0.00%,62.7MiB / 23.47GiB,0.26%,3.74MB / 4.03MB,0B / 0B,27
+2025-03-12 00:57:46,ALL,All Containers,275.85%,7.56GiB / 23.47GiB,32.20%,1.63GB / 1.63GB,0B / 0B,1162
+2025-03-12 00:57:57,7941f509fee6,hdfs-spark-hive-docker-history-1,0.14%,1012MiB / 23.47GiB,4.21%,30.2MB / 1.46MB,0B / 0B,100
+2025-03-12 00:57:57,ec0defcd48e4,hdfs-spark-hive-docker-worker1-1,0.70%,2.137GiB / 23.47GiB,9.10%,770MB / 428MB,0B / 0B,288
+2025-03-12 00:57:57,13bff8c591b1,hdfs-spark-hive-docker-worker2-1,276.02%,2.585GiB / 23.47GiB,11.01%,775MB / 473MB,0B / 0B,327
+2025-03-12 00:57:57,a3d3766552e1,hdfs-spark-hive-docker-master-1,77.07%,2.805GiB / 23.47GiB,11.95%,51.9MB / 725MB,0B / 0B,525
+2025-03-12 00:57:57,51fe5cb98b94,hdfs-spark-hive-docker-metastore-1,0.00%,62.7MiB / 23.47GiB,0.26%,3.74MB / 4.03MB,0B / 0B,27
+2025-03-12 00:57:57,ALL,All Containers,353.93%,8.58GiB / 23.47GiB,36.54%,1.63GB / 1.63GB,0B / 0B,1267
+2025-03-12 00:58:08,7941f509fee6,hdfs-spark-hive-docker-history-1,2.43%,1012MiB / 23.47GiB,4.21%,31.1MB / 1.47MB,0B / 0B,100
+2025-03-12 00:58:08,ec0defcd48e4,hdfs-spark-hive-docker-worker1-1,0.51%,1.868GiB / 23.47GiB,7.96%,776MB / 431MB,0B / 0B,245
+2025-03-12 00:58:08,13bff8c591b1,hdfs-spark-hive-docker-worker2-1,0.66%,1.886GiB / 23.47GiB,8.04%,778MB / 479MB,0B / 0B,247
+2025-03-12 00:58:08,a3d3766552e1,hdfs-spark-hive-docker-master-1,1.09%,2.111GiB / 23.47GiB,8.99%,52MB / 726MB,0B / 0B,428
+2025-03-12 00:58:08,51fe5cb98b94,hdfs-spark-hive-docker-metastore-1,0.00%,62.7MiB / 23.47GiB,0.26%,3.74MB / 4.03MB,0B / 0B,27
+2025-03-12 00:58:08,ALL,All Containers,4.69%,6.91GiB / 23.47GiB,29.46%,1.64GB / 1.64GB,0B / 0B,1047

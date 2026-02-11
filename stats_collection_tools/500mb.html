@@ -1,0 +1,483 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- saved from url=(0029)http://localhost:8088/cluster -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=8">
+  
+  <style type="text/css">
+    #apps_paginate span {font-weight:normal}
+    #apps .progress {width:8em}
+    #apps_processing {top:-1.5em; font-size:1em;
+      color:#000; background:#fefefe}
+    #apps .queue {width:6em}
+    #apps .ui {width:8em}
+  </style>
+  <title>
+    All Applications
+  </title>
+  <link rel="stylesheet" href="./500mb_files/yarn.css">
+  <style type="text/css">
+    #layout { height: 100%; }
+    #layout thead td { height: 3em; }
+    #layout #navcell { width: 11em; padding: 0 1em; }
+    #layout td.content { padding-top: 0 }
+    #layout tbody { vertical-align: top; }
+    #layout tfoot td { height: 4em; }
+  </style>
+  <link rel="stylesheet" href="./500mb_files/jquery-ui.css">
+  <link rel="stylesheet" href="./500mb_files/jquery.dataTables.css">
+  <link rel="stylesheet" href="./500mb_files/jui-dt.css">
+  <link rel="stylesheet" href="./500mb_files/custom_datatable.css">
+  <script type="text/javascript" src="./500mb_files/jquery-3.6.0.min.js.下载">
+  </script>
+  <script type="text/javascript" src="./500mb_files/jquery-ui-1.13.2.custom.min.js.下载">
+  </script>
+  <script type="text/javascript" src="./500mb_files/jquery.dataTables.min.js.下载">
+  </script>
+  <script type="text/javascript" src="./500mb_files/yarn.dt.plugins.js.下载">
+  </script>
+  <script type="text/javascript" src="./500mb_files/natural.js.下载">
+  </script>
+  <style type="text/css">
+    #jsnotice { padding: 0.2em; text-align: center; }
+    .ui-progressbar { height: 1em; min-width: 5em }
+  </style>
+  <script type="text/javascript">
+    $(function() {
+      $('#nav').accordion({autoHeight:false, active:0});
+    appsDataTable =  $('#apps').dataTable({bStateSave : true, "fnStateSave": function (oSettings, oData) {  data = oData.aoSearchCols;for(i =0 ; i < data.length; i ++) {data[i].sSearch = ""} sessionStorage.setItem( oSettings.sTableId, JSON.stringify(oData) ); }, "fnStateLoad": function (oSettings) { return JSON.parse( sessionStorage.getItem(oSettings.sTableId) );}, bJQueryUI:true, sPaginationType: 'full_numbers', iDisplayLength:20, aLengthMenu:[20, 40, 60, 80, 100], 'aaData': appsTableData, bDeferRender: true, bProcessing: true
+, aoColumnDefs: [
+{'sType':'natural', 'aTargets': [0], 'mRender': parseHadoopID },
+{'sType':'num-ignore-str', 'aTargets': [7, 8, 9], 'mRender': renderHadoopDate },
+{'sType':'num-ignore-str', 'aTargets': [12, 13, 14, 15, 16] },
+{'sType':'numeric', bSearchable:false, 'aTargets':[21], 'mRender': parseHadoopProgress }
+], aaSorting: [[0, 'desc']]}).fnSetFilteringDelay(188);
+    });
+  </script>
+  </head><body><div id="jsnotice" class="ui-state-error" style="display: none;">
+    This page will not function without javascript enabled. Please enable javascript on your browser.
+  </div>
+  <script type="text/javascript">
+    $('#jsnotice').hide();
+  </script>
+  <table id="layout" class="ui-widget-content">
+    <thead>
+      <tr>
+        <td colspan="2">
+          <div id="header" class="ui-widget">
+            <div id="user">
+              Logged in as: dr.who
+            </div>
+            <div id="logo">
+              <img src="./500mb_files/hadoop-st.png">
+            </div>
+            <h1>
+              All Applications
+            </h1>
+          </div>
+        </td>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="2">
+          <div id="footer" class="ui-widget">
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr>
+        <td id="navcell">
+          <div id="nav" class="ui-accordion ui-widget ui-helper-reset" role="tablist">
+            <h3 class="ui-accordion-header ui-corner-top ui-state-default ui-accordion-header-active ui-state-active ui-accordion-icons" role="tab" id="ui-id-1" aria-controls="ui-id-2" aria-selected="true" aria-expanded="true" tabindex="0"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
+              Cluster
+            </h3>
+            <ul class="ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content ui-accordion-content-active" id="ui-id-2" aria-labelledby="ui-id-1" role="tabpanel" aria-hidden="false" style="height: 222.766px;">
+              <li>
+                <a href="http://localhost:8088/cluster/cluster">About</a>
+              </li><li>
+                <a href="http://localhost:8088/cluster/nodes">Nodes</a>
+              </li><li>
+                <a href="http://localhost:8088/cluster/nodelabels">Node Labels</a>
+              </li><li>
+                <a href="http://localhost:8088/cluster/apps">Applications</a>
+                <ul>
+                  <li>
+                  </li><li>
+                    <a href="http://localhost:8088/cluster/apps/NEW">NEW</a>
+                  </li><li>
+                    <a href="http://localhost:8088/cluster/apps/NEW_SAVING">NEW_SAVING</a>
+                  </li><li>
+                    <a href="http://localhost:8088/cluster/apps/SUBMITTED">SUBMITTED</a>
+                  </li><li>
+                    <a href="http://localhost:8088/cluster/apps/ACCEPTED">ACCEPTED</a>
+                  </li><li>
+                    <a href="http://localhost:8088/cluster/apps/RUNNING">RUNNING</a>
+                  </li><li>
+                    <a href="http://localhost:8088/cluster/apps/FINISHED">FINISHED</a>
+                  </li><li>
+                    <a href="http://localhost:8088/cluster/apps/FAILED">FAILED</a>
+                  </li><li>
+                    <a href="http://localhost:8088/cluster/apps/KILLED">KILLED</a>
+                </li></ul>
+              </li><li>
+                <a href="http://localhost:8088/cluster/scheduler">Scheduler</a>
+            </li></ul>
+            <h3 class="ui-accordion-header ui-corner-top ui-accordion-header-collapsed ui-corner-all ui-state-default ui-accordion-icons" role="tab" id="ui-id-3" aria-controls="ui-id-4" aria-selected="false" aria-expanded="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
+              Tools
+            </h3>
+            <ul class="ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content" id="ui-id-4" aria-labelledby="ui-id-3" role="tabpanel" aria-hidden="true" style="display: none; height: 222.766px;">
+              <li>
+                <a href="http://localhost:8088/conf">Configuration</a>
+              </li><li>
+                <a href="http://localhost:8088/logs">Local logs</a>
+              </li><li>
+                <a href="http://localhost:8088/stacks">Server stacks</a>
+              </li><li>
+                <a href="http://localhost:8088/jmx?qry=Hadoop:*">Server metrics</a>
+            </li></ul>
+          </div>
+        </td>
+        <td class="content">
+          <style type="text/css">
+            .metrics {margin-bottom:5px}
+          </style>
+          <div class="metrics">
+            <h3>
+              Cluster Metrics
+            </h3>
+            <table id="metricsoverview">
+              <thead class="ui-widget-header">
+                <tr>
+                  <th class="ui-state-default">
+                    Apps Submitted
+                  </th>
+                  <th class="ui-state-default">
+                    Apps Pending
+                  </th>
+                  <th class="ui-state-default">
+                    Apps Running
+                  </th>
+                  <th class="ui-state-default">
+                    Apps Completed
+                  </th>
+                  <th class="ui-state-default">
+                    Containers Running
+                  </th>
+                  <th class="ui-state-default">
+                    Used Resources
+                  </th>
+                  <th class="ui-state-default">
+                    Total Resources
+                  </th>
+                  <th class="ui-state-default">
+                    Reserved Resources
+                  </th>
+                  <th class="ui-state-default">
+                    Physical Mem Used %
+                  </th>
+                  <th class="ui-state-default">
+                    Physical VCores Used %
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="ui-widget-content">
+                <tr>
+                  <td>
+                    48
+                  </td>
+                  <td>
+                    0
+                  </td>
+                  <td>
+                    0
+                  </td>
+                  <td>
+                    48
+                  </td>
+                  <td>
+                    0
+                  </td>
+                  <td>
+                    &lt;memory:0 B, vCores:0&gt;
+                  </td>
+                  <td>
+                    &lt;memory:16 GB, vCores:16&gt;
+                  </td>
+                  <td>
+                    &lt;memory:0 B, vCores:0&gt;
+                  </td>
+                  <td>
+                    33
+                  </td>
+                  <td>
+                    0
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <h3>
+              Cluster Nodes Metrics
+            </h3>
+            <table id="nodemetricsoverview">
+              <thead class="ui-widget-header">
+                <tr>
+                  <th class="ui-state-default">
+                    Active Nodes
+                  </th>
+                  <th class="ui-state-default">
+                    Decommissioning Nodes
+                  </th>
+                  <th class="ui-state-default">
+                    Decommissioned Nodes
+                  </th>
+                  <th class="ui-state-default">
+                    Lost Nodes
+                  </th>
+                  <th class="ui-state-default">
+                    Unhealthy Nodes
+                  </th>
+                  <th class="ui-state-default">
+                    Rebooted Nodes
+                  </th>
+                  <th class="ui-state-default">
+                    Shutdown Nodes
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="ui-widget-content">
+                <tr>
+                  <td>
+                    <a href="http://localhost:8088/cluster/nodes">2</a>
+                  </td>
+                  <td>
+                    <a href="http://localhost:8088/cluster/nodes/decommissioning">0</a>
+                  </td>
+                  <td>
+                    <a href="http://localhost:8088/cluster/nodes/decommissioned">0</a>
+                  </td>
+                  <td>
+                    <a href="http://localhost:8088/cluster/nodes/lost">0</a>
+                  </td>
+                  <td>
+                    <a href="http://localhost:8088/cluster/nodes/unhealthy">0</a>
+                  </td>
+                  <td>
+                    <a href="http://localhost:8088/cluster/nodes/rebooted">0</a>
+                  </td>
+                  <td>
+                    <a href="http://localhost:8088/cluster/nodes/shutdown">0</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <h3>
+              Scheduler Metrics
+            </h3>
+            <table id="schedulermetricsoverview">
+              <thead class="ui-widget-header">
+                <tr>
+                  <th class="ui-state-default">
+                    Scheduler Type
+                  </th>
+                  <th class="ui-state-default">
+                    Scheduling Resource Type
+                  </th>
+                  <th class="ui-state-default">
+                    Minimum Allocation
+                  </th>
+                  <th class="ui-state-default">
+                    Maximum Allocation
+                  </th>
+                  <th class="ui-state-default">
+                    Maximum Cluster Application Priority
+                  </th>
+                  <th class="ui-state-default">
+                    Scheduler Busy %
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="ui-widget-content">
+                <tr>
+                  <td>
+                    Capacity Scheduler
+                  </td>
+                  <td>
+                    [memory-mb (unit=Mi), vcores]
+                  </td>
+                  <td>
+                    &lt;memory:1024, vCores:1&gt;
+                  </td>
+                  <td>
+                    &lt;memory:8192, vCores:4&gt;
+                  </td>
+                  <td>
+                    0
+                  </td>
+                  <td>
+                    0
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="apps_wrapper" class="dataTables_wrapper no-footer"><div class="dataTables_length" id="apps_length"><label>Show <select name="apps_length" aria-controls="apps" class=""><option value="20">20</option><option value="40">40</option><option value="60">60</option><option value="80">80</option><option value="100">100</option></select> entries</label></div><div id="apps_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="apps"></label></div><div id="apps_processing" class="dataTables_processing" style="display: none;">Processing...</div><table id="apps" class="dataTable no-footer" role="grid" aria-describedby="apps_info" style="width: 2757px;">
+            <thead>
+              <tr role="row"><th class="id sorting_desc" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-sort="descending" aria-label="
+                  ID
+                : activate to sort column ascending" style="width: 216px;">
+                  ID
+                </th><th class="user sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  User
+                : activate to sort column ascending" style="width: 33px;">
+                  User
+                </th><th class="name sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Name
+                : activate to sort column ascending" style="width: 162px;">
+                  Name
+                </th><th class="type sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Application Type
+                : activate to sort column ascending" style="width: 84px;">
+                  Application Type
+                </th><th class="apptag sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Application Tags
+                : activate to sort column ascending" style="width: 84px;">
+                  Application Tags
+                </th><th class="queue sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Queue
+                : activate to sort column ascending" style="width: 48px;">
+                  Queue
+                </th><th class="priority sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Application Priority
+                : activate to sort column ascending" style="width: 84px;">
+                  Application Priority
+                </th><th class="starttime sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  StartTime
+                : activate to sort column ascending" style="width: 71px;">
+                  StartTime
+                </th><th class="IDlaunchtime sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  LaunchTime
+                : activate to sort column ascending" style="width: 88px;">
+                  LaunchTime
+                </th><th class="finishtime sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  FinishTime
+                : activate to sort column ascending" style="width: 79px;">
+                  FinishTime
+                </th><th class="state sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  State
+                : activate to sort column ascending" style="width: 50px;">
+                  State
+                </th><th class="finalstatus sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  FinalStatus
+                : activate to sort column ascending" style="width: 80px;">
+                  FinalStatus
+                </th><th class="runningcontainer sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Running Containers
+                : activate to sort column ascending" style="width: 79px;">
+                  Running Containers
+                </th><th class="allocatedCpu sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Allocated CPU VCores
+                : activate to sort column ascending" style="width: 69px;">
+                  Allocated CPU VCores
+                </th><th class="allocatedMemory sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Allocated Memory MB
+                : activate to sort column ascending" style="width: 69px;">
+                  Allocated Memory MB
+                </th><th class="allocatedGpu sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Allocated GPUs
+                : activate to sort column ascending" style="width: 69px;">
+                  Allocated GPUs
+                </th><th class="reservedCpu sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Reserved CPU VCores
+                : activate to sort column ascending" style="width: 67px;">
+                  Reserved CPU VCores
+                </th><th class="reservedMemory sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Reserved Memory MB
+                : activate to sort column ascending" style="width: 67px;">
+                  Reserved Memory MB
+                </th><th class="reservedGpu sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Reserved GPUs
+                : activate to sort column ascending" style="width: 67px;">
+                  Reserved GPUs
+                </th><th class="queuePercentage sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  % of Queue
+                : activate to sort column ascending" style="width: 48px;">
+                  % of Queue
+                </th><th class="clusterPercentage sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  % of Cluster
+                : activate to sort column ascending" style="width: 51px;">
+                  % of Cluster
+                </th><th class="progress sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Progress
+                : activate to sort column ascending" style="width: 65px;">
+                  Progress
+                </th><th class="ui sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Tracking UI
+                : activate to sort column ascending" style="width: 62px;">
+                  Tracking UI
+                </th><th class="blacklisted sorting" tabindex="0" aria-controls="apps" rowspan="1" colspan="1" aria-label="
+                  Blacklisted Nodes
+                : activate to sort column ascending" style="width: 78px;">
+                  Blacklisted Nodes
+                </th></tr>
+            </thead>
+            <script type="text/javascript">
+              var appsTableData=[
+["<a href='/cluster/app/application_1741747991273_0012'>application_1741747991273_0012</a>","jupyter","Test5MB_Aggregate_32","SPARK","","default","0","1741764905494","1741764905583","1741764919976","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0012/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0011'>application_1741747991273_0011</a>","jupyter","Test5MB_Aggregate_16","SPARK","","default","0","1741764837416","1741764837551","1741764852099","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0011/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0014'>application_1741747991273_0014</a>","jupyter","Test5MB_Join_16","SPARK","","default","0","1741765031966","1741765032204","1741765047663","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0014/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0013'>application_1741747991273_0013</a>","jupyter","Test5MB_Join_4","SPARK","","default","0","1741764981249","1741764981372","1741764995710","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0013/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0016'>application_1741747991273_0016</a>","jupyter","Test5MB_Window_4","SPARK","","default","0","1741765130723","1741765131130","1741765145926","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0016/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0015'>application_1741747991273_0015</a>","jupyter","Test5MB_Join_32","SPARK","","default","0","1741765082074","1741765082572","1741765098179","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0015/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0018'>application_1741747991273_0018</a>","jupyter","Test5MB_Window_32","SPARK","","default","0","1741765297252","1741765297453","1741765312994","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0018/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0017'>application_1741747991273_0017</a>","jupyter","Test5MB_Window_16","SPARK","","default","0","1741765246210","1741765246369","1741765261439","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0017/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0004'>application_1741747991273_0004</a>","jupyter","Test5MB_Aggregate","SPARK","","default","0","1741764001201","1741764001405","1741764020761","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0004/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0003'>application_1741747991273_0003</a>","jupyter","ExplicitSchemaCSV500MB","SPARK","","default","0","1741761534190","1741761534485","1741761569127","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0003/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0006'>application_1741747991273_0006</a>","jupyter","Test5MB_Aggregate","SPARK","","default","0","1741764450166","1741764450579","1741764468687","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0006/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0005'>application_1741747991273_0005</a>","jupyter","Test5MB_Join","SPARK","","default","0","1741764068364","1741764068581","1741764086090","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0005/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0007'>application_1741747991273_0007</a>","jupyter","Test5MB_Join","SPARK","","default","0","1741764552743","1741764553088","1741764569357","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0007/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0010'>application_1741747991273_0010</a>","jupyter","Test5MB_Aggregate_4","SPARK","","default","0","1741764751347","1741764751862","1741764766133","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0010/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0009'>application_1741747991273_0009</a>","jupyter","Test5MB_Window","SPARK","","default","0","1741764676045","1741764676241","1741764694947","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0009/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0028'>application_1741747991273_0028</a>","jupyter","Test50MB_Window_4","SPARK","","default","0","1741766378904","1741766378968","1741766395226","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0028/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0027'>application_1741747991273_0027</a>","jupyter","Test50MB_Join_32","SPARK","","default","0","1741766332820","1741766333158","1741766349968","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0027/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0030'>application_1741747991273_0030</a>","jupyter","Test50MB_Window_16","SPARK","","default","0","1741766485134","1741766485519","1741766503525","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0030/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0029'>application_1741747991273_0029</a>","jupyter","Test50MB_Window_16","SPARK","","default","0","1741766420406","1741766420702","1741766432485","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0029/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0032'>application_1741747991273_0032</a>","jupyter","Test500MB_Aggregate","SPARK","","default","0","1741766718738","1741766719013","1741766738037","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0032/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0031'>application_1741747991273_0031</a>","jupyter","Test50MB_Window_32","SPARK","","default","0","1741766527765","1741766528012","1741766544370","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0031/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0034'>application_1741747991273_0034</a>","jupyter","Test500MB_Aggregate","SPARK","","default","0","1741767139992","1741767140240","1741767156583","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0034/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0033'>application_1741747991273_0033</a>","jupyter","Test500MB_Join","SPARK","","default","0","1741766793515","1741766793564","1741766815438","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0033/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0020'>application_1741747991273_0020</a>","jupyter","Test50MB_Join","SPARK","","default","0","1741765902240","1741765902383","1741765921516","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0020/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0019'>application_1741747991273_0019</a>","jupyter","Test50MB_Aggregate","SPARK","","default","0","1741765782380","1741765782448","1741765800786","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0019/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0022'>application_1741747991273_0022</a>","jupyter","Test50MB_Aggregate_4","SPARK","","default","0","1741766044048","1741766044331","1741766060157","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0022/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0021'>application_1741747991273_0021</a>","jupyter","Test50MB_Window","SPARK","","default","0","1741765957681","1741765957811","1741765976596","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0021/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0024'>application_1741747991273_0024</a>","jupyter","Test50MB_Aggregate_32","SPARK","","default","0","1741766156784","1741766157273","1741766173470","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0024/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0023'>application_1741747991273_0023</a>","jupyter","Test50MB_Aggregate_16","SPARK","","default","0","1741766110064","1741766110401","1741766126341","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0023/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0026'>application_1741747991273_0026</a>","jupyter","Test50MB_Join_16","SPARK","","default","0","1741766269576","1741766269786","1741766286177","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0026/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0025'>application_1741747991273_0025</a>","jupyter","Test50MB_Join_4","SPARK","","default","0","1741766216689","1741766216895","1741766233335","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0025/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0044'>application_1741747991273_0044</a>","jupyter","Test500MB_Aggregate_16","SPARK","","default","0","1741770288264","1741770288532","1741770317005","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0044/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0043'>application_1741747991273_0043</a>","jupyter","Test500MB_Aggregate_4","SPARK","","default","0","1741770222309","1741770222628","1741770251085","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0043/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0046'>application_1741747991273_0046</a>","jupyter","Test500MB_Join_4","SPARK","","default","0","1741770422039","1741770422163","1741770583175","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0046/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0045'>application_1741747991273_0045</a>","jupyter","Test500MB_Aggregate_32","SPARK","","default","0","1741770353458","1741770353927","1741770382705","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0045/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0048'>application_1741747991273_0048</a>","jupyter","Test500MB_Window_16","SPARK","","default","0","1741770683171","1741770683624","1741770711431","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0048/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0047'>application_1741747991273_0047</a>","jupyter","Test500MB_Window_4","SPARK","","default","0","1741770614407","1741770614589","1741770643225","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0047/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0049'>application_1741747991273_0049</a>","jupyter","Test500MB_Window_32","SPARK","","default","0","1741770756331","1741770756743","1741770785325","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0049/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0036'>application_1741747991273_0036</a>","jupyter","Test5MB_Aggregate","SPARK","","default","0","1741767345408","1741767345569","1741767361158","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0036/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0035'>application_1741747991273_0035</a>","jupyter","Test500MB_Aggregate","SPARK","","default","0","1741767187973","1741767188086","1741767204421","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0035/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0038'>application_1741747991273_0038</a>","jupyter","Test500MB_Aggregate","SPARK","","default","0","1741767642069","1741767642540","1741767659877","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0038/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0037'>application_1741747991273_0037</a>","jupyter","Test50MB_Aggregate","SPARK","","default","0","1741767469794","1741767470284","1741767488357","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0037/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0040'>application_1741747991273_0040</a>","jupyter","Test500MB_Join","SPARK","","default","0","1741768456178","1741768456296","1741769800522","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0040/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0039'>application_1741747991273_0039</a>","jupyter","Test500MB_Aggregate","SPARK","","default","0","1741768342792","1741768343060","1741768365732","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0039/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0042'>application_1741747991273_0042</a>","jupyter","Test500MB_Aggregate_4","SPARK","","default","0","1741769938203","1741769938546","1741769948588","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0042/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0041'>application_1741747991273_0041</a>","jupyter","Test500MB_Window","SPARK","","default","0","1741769849974","1741769850046","1741769873486","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0041/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0002'>application_1741747991273_0002</a>","jupyter","ExplicitSchemaCSV50MB","SPARK","","default","0","1741761493474","1741761493879","1741761513698","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0002/'>History</a>","0"],
+["<a href='/cluster/app/application_1741747991273_0001'>application_1741747991273_0001</a>","jupyter","ExplicitSchemaCSV5MB","SPARK","","default","0","1741761360726","1741761361397","1741761386175","FINISHED","SUCCEEDED","N/A","N/A","N/A","N/A","N/A","N/A","N/A","0.0","0.0","<br title='100.0'> <div class='ui-progressbar ui-widget ui-widget-content ui-corner-all' title='100.0%'> <div class='ui-progressbar-value ui-widget-header ui-corner-left' style='width:100.0%'> </div> </div>","<a href='http://master:8088/proxy/application_1741747991273_0001/'>History</a>","0"]
+]
+            </script>
+            <tbody>
+            <tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0049">application_1741747991273_0049</a></td><td>jupyter</td><td>Test500MB_Window_32</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 02:12:36 -0700 2025</td><td>Wed Mar 12 02:12:36 -0700 2025</td><td>Wed Mar 12 02:13:05 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0049/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0048">application_1741747991273_0048</a></td><td>jupyter</td><td>Test500MB_Window_16</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 02:11:23 -0700 2025</td><td>Wed Mar 12 02:11:23 -0700 2025</td><td>Wed Mar 12 02:11:51 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0048/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0047">application_1741747991273_0047</a></td><td>jupyter</td><td>Test500MB_Window_4</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 02:10:14 -0700 2025</td><td>Wed Mar 12 02:10:14 -0700 2025</td><td>Wed Mar 12 02:10:43 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0047/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0046">application_1741747991273_0046</a></td><td>jupyter</td><td>Test500MB_Join_4</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 02:07:02 -0700 2025</td><td>Wed Mar 12 02:07:02 -0700 2025</td><td>Wed Mar 12 02:09:43 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0046/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0045">application_1741747991273_0045</a></td><td>jupyter</td><td>Test500MB_Aggregate_32</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 02:05:53 -0700 2025</td><td>Wed Mar 12 02:05:53 -0700 2025</td><td>Wed Mar 12 02:06:22 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0045/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0044">application_1741747991273_0044</a></td><td>jupyter</td><td>Test500MB_Aggregate_16</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 02:04:48 -0700 2025</td><td>Wed Mar 12 02:04:48 -0700 2025</td><td>Wed Mar 12 02:05:17 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0044/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0043">application_1741747991273_0043</a></td><td>jupyter</td><td>Test500MB_Aggregate_4</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 02:03:42 -0700 2025</td><td>Wed Mar 12 02:03:42 -0700 2025</td><td>Wed Mar 12 02:04:11 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0043/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0042">application_1741747991273_0042</a></td><td>jupyter</td><td>Test500MB_Aggregate_4</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:58:58 -0700 2025</td><td>Wed Mar 12 01:58:58 -0700 2025</td><td>Wed Mar 12 01:59:08 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0042/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0041">application_1741747991273_0041</a></td><td>jupyter</td><td>Test500MB_Window</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:57:29 -0700 2025</td><td>Wed Mar 12 01:57:30 -0700 2025</td><td>Wed Mar 12 01:57:53 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0041/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0040">application_1741747991273_0040</a></td><td>jupyter</td><td>Test500MB_Join</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:34:16 -0700 2025</td><td>Wed Mar 12 01:34:16 -0700 2025</td><td>Wed Mar 12 01:56:40 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0040/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0039">application_1741747991273_0039</a></td><td>jupyter</td><td>Test500MB_Aggregate</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:32:22 -0700 2025</td><td>Wed Mar 12 01:32:23 -0700 2025</td><td>Wed Mar 12 01:32:45 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0039/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0038">application_1741747991273_0038</a></td><td>jupyter</td><td>Test500MB_Aggregate</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:20:42 -0700 2025</td><td>Wed Mar 12 01:20:42 -0700 2025</td><td>Wed Mar 12 01:20:59 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0038/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0037">application_1741747991273_0037</a></td><td>jupyter</td><td>Test50MB_Aggregate</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:17:49 -0700 2025</td><td>Wed Mar 12 01:17:50 -0700 2025</td><td>Wed Mar 12 01:18:08 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0037/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0036">application_1741747991273_0036</a></td><td>jupyter</td><td>Test5MB_Aggregate</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:15:45 -0700 2025</td><td>Wed Mar 12 01:15:45 -0700 2025</td><td>Wed Mar 12 01:16:01 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0036/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0035">application_1741747991273_0035</a></td><td>jupyter</td><td>Test500MB_Aggregate</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:13:07 -0700 2025</td><td>Wed Mar 12 01:13:08 -0700 2025</td><td>Wed Mar 12 01:13:24 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0035/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0034">application_1741747991273_0034</a></td><td>jupyter</td><td>Test500MB_Aggregate</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:12:19 -0700 2025</td><td>Wed Mar 12 01:12:20 -0700 2025</td><td>Wed Mar 12 01:12:36 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0034/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0033">application_1741747991273_0033</a></td><td>jupyter</td><td>Test500MB_Join</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:06:33 -0700 2025</td><td>Wed Mar 12 01:06:33 -0700 2025</td><td>Wed Mar 12 01:06:55 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0033/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0032">application_1741747991273_0032</a></td><td>jupyter</td><td>Test500MB_Aggregate</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:05:18 -0700 2025</td><td>Wed Mar 12 01:05:19 -0700 2025</td><td>Wed Mar 12 01:05:38 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0032/">History</a></td><td>0</td></tr><tr role="row" class="odd"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0031">application_1741747991273_0031</a></td><td>jupyter</td><td>Test50MB_Window_32</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:02:07 -0700 2025</td><td>Wed Mar 12 01:02:08 -0700 2025</td><td>Wed Mar 12 01:02:24 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0031/">History</a></td><td>0</td></tr><tr role="row" class="even"><td class="sorting_1"><a href="http://localhost:8088/cluster/app/application_1741747991273_0030">application_1741747991273_0030</a></td><td>jupyter</td><td>Test50MB_Window_16</td><td>SPARK</td><td></td><td>default</td><td>0</td><td>Wed Mar 12 01:01:25 -0700 2025</td><td>Wed Mar 12 01:01:25 -0700 2025</td><td>Wed Mar 12 01:01:43 -0700 2025</td><td>FINISHED</td><td>SUCCEEDED</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0.0</td><td>0.0</td><td><br title="100.0"> <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" title="100.0%"> <div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width:100.0%"> </div> </div></td><td><a href="http://master:8088/proxy/application_1741747991273_0030/">History</a></td><td>0</td></tr></tbody>
+          </table><div class="dataTables_info" id="apps_info" role="status" aria-live="polite">Showing 1 to 20 of 48 entries</div><div class="dataTables_paginate paging_full_numbers" id="apps_paginate"><a class="paginate_button first disabled" aria-controls="apps" data-dt-idx="0" tabindex="0" id="apps_first">First</a><a class="paginate_button previous disabled" aria-controls="apps" data-dt-idx="1" tabindex="0" id="apps_previous">Previous</a><span><a class="paginate_button current" aria-controls="apps" data-dt-idx="2" tabindex="0">1</a><a class="paginate_button " aria-controls="apps" data-dt-idx="3" tabindex="0">2</a><a class="paginate_button " aria-controls="apps" data-dt-idx="4" tabindex="0">3</a></span><a class="paginate_button next" aria-controls="apps" data-dt-idx="5" tabindex="0" id="apps_next">Next</a><a class="paginate_button last" aria-controls="apps" data-dt-idx="6" tabindex="0" id="apps_last">Last</a></div></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</body></html>
