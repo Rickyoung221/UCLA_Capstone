@@ -56,21 +56,23 @@ advisor/
 ├── recommend.py              # 推荐逻辑 recommend(data_size, query_type, objective=...)
 ├── advisor.py                # CLI 入口
 └── scripts/
-    └── build_summary.py      # 汇总脚本：合并 runtime + 资源指标 → experiment_summary.csv
+    ├── build_summary.py      # 汇总脚本：合并 runtime + 资源指标 → experiment_summary.csv
+    ├── evaluate_advisor.py   # 评估脚本：推荐 vs 真实最优、一致率
+    └── plot_runtime.py       # 画 runtime 对比图（需 matplotlib）
 ```
 
 ---
 
 ## 汇总表 Schema（简要）
 
-| 列 | 说明 |
-|----|------|
-| data_size | 5mb / 50mb / 500mb |
-| query_type | aggregate / join / window |
-| strategy | hive / spark_repartition |
-| num_partitions | 4 / 16 / 32（仅 spark_repartition）或空 |
-| runtime_seconds | 最小运行时间（秒） |
-| max_cpu_pct | 最大 CPU 使用率（%） |
-| max_memory_mib | 最大内存（MiB） |
+| 列              | 说明                                    |
+| --------------- | --------------------------------------- |
+| data_size       | 5mb / 50mb / 500mb                      |
+| query_type      | aggregate / join / window               |
+| strategy        | hive / spark_repartition                |
+| num_partitions  | 4 / 16 / 32（仅 spark_repartition）或空 |
+| runtime_seconds | 最小运行时间（秒）                      |
+| max_cpu_pct     | 最大 CPU 使用率（%）                    |
+| max_memory_mib  | 最大内存（MiB）                         |
 
 详见 [docs/EXPERIMENT_DESIGN.md](../docs/EXPERIMENT_DESIGN.md)。

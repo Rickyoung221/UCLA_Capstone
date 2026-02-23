@@ -17,6 +17,9 @@ RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/
       libc6-dev \
  && rm -rf /var/lib/apt/lists/*
 
+# Fallback so interactive shells (e.g. docker exec bash) get correct JAVA_HOME on any arch
+RUN echo 'export JAVA_HOME=$(ls -d /usr/lib/jvm/java-8-openjdk-* 2>/dev/null | head -1)' > /etc/profile.d/java.sh
+
 ARG USERNAME=jupyter
 ARG GROUPNAME=jupyter
 ARG UID=1001
@@ -25,11 +28,13 @@ ARG GID=1001
 RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
  && chmod 0440 /etc/sudoers.d/$USERNAME \
  && groupadd -g $GID $GROUPNAME \
- && useradd -m -s /bin/bash -u $UID -g $GID $USERNAME
+ && useradd -m -s /bin/bash -u $UID -g $GID $USERNAME \
+ && echo '[ -f /etc/profile.d/java.sh ] && . /etc/profile.d/java.sh' >> /home/$USERNAME/.bashrc
 
 USER $USERNAME
 
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+# JAVA_HOME is set in entrypoint.sh at runtime (so amd64/arm64 both work).
+# Do not set ENV JAVA_HOME here.
 
 # Hadoop
 ARG HADOOP_VERSION=3.3.6
@@ -51,6 +56,9 @@ RUN set -x \
 ENV HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 ENV PATH=$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$PATH
 ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
+
+# So NameNode/Datanode start when user cannot renice (e.g. Docker without SYS_NICE)
+RUN sed -i '/renice.*HADOOP_NICENESS/s/$/ || true/' $HADOOP_HOME/libexec/hadoop-functions.sh
 
 # Spark
 ARG SPARK_VERSION=3.5.3

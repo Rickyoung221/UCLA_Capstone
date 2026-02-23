@@ -82,7 +82,7 @@ def recommend(
     if not subset:
         raise ValueError(
             f"No experiments for data_size={data_size!r} query_type={query_type!r}. "
-            f"Valid: data_size in 5mb,50mb,500mb; query_type in aggregate,join,window"
+            f"Valid: data_size in 5mb,50mb,500mb,5gb; query_type in aggregate,join,window"
         )
 
     if objective == "runtime":

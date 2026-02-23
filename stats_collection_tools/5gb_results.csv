@@ -1,0 +1,13 @@
+id,name,start_time,launch_time,finish_time,runtime_seconds
+placeholder,Test5GB_Aggregate,,,.,11.72
+placeholder,Test5GB_Aggregate_4,,,.,55.63
+placeholder,Test5GB_Aggregate_16,,,.,52.89
+placeholder,Test5GB_Aggregate_32,,,.,51.64
+placeholder,Test5GB_Join,,,.,8.84
+placeholder,Test5GB_Join_4,,,.,54.82
+placeholder,Test5GB_Join_16,,,.,55.76
+placeholder,Test5GB_Join_32,,,.,55.89
+placeholder,Test5GB_Window,,,.,18.87
+placeholder,Test5GB_Window_4,,,.,42.63
+placeholder,Test5GB_Window_16,,,.,43.81
+placeholder,Test5GB_Window_32,,,.,43.94
