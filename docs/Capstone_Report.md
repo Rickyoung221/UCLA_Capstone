@@ -7,7 +7,7 @@
 
 ## 1. Abstract
 
-This project implements a **lightweight, workload-aware Partitioning Advisor** for Apache Spark with Hive: given **data size** (5mb / 50mb / 500mb / 2gb) and **query type** (aggregate / join / window), it recommends a partitioning strategy (Hive partitioning or Spark repartition) and, for repartition, the number of partitions (4 / 16 / 32), with an optional optimization objective (runtime / CPU / memory). The Advisor is built on an experiment summary table (lookup-based, V1). On all 12 (data_size, query_type) combinations in that summary, its recommendations match the empirically best configuration for runtime with **100% agreement**. The experiments show that at larger scales (e.g., 2gb) Hive partitioning has a clear runtime advantage; join workloads are most sensitive to strategy choice; and a moderate partition count (e.g., 4) often outperforms higher counts. The project is fully reproducible and provides a Dockerized Spark–Hive cluster, experiment and data-collection scripts, the summary pipeline, the Advisor CLI, and evaluation scripts, with documentation for replication and extension.
+Choosing partition strategy and count for Spark–Hive workloads is often done by trial-and-error. This project implements a **lightweight, workload-aware Partitioning Advisor** for Apache Spark with Hive: given **data size** (5mb / 50mb / 500mb / 2gb) and **query type** (aggregate / join / window), it recommends a partitioning strategy (Hive partitioning or Spark repartition) and, for repartition, the number of partitions (4 / 16 / 32), with an optional optimization objective (runtime / CPU / memory). The Advisor is built on an experiment summary table (lookup-based, V1). On all 12 (data_size, query_type) combinations in that summary, its recommendations match the empirically best configuration for runtime with **100% agreement**. The experiments show that at larger scales (e.g., 2gb) Hive partitioning has a clear runtime advantage; join workloads are most sensitive to strategy choice; and a moderate partition count (e.g., 4) often outperforms higher counts. The project is fully reproducible and provides a Dockerized Spark–Hive cluster, experiment and data-collection scripts, the summary pipeline, the Advisor CLI, and evaluation scripts, with documentation for replication and extension. The Advisor reduces manual tuning by providing a consistent, data-driven recommendation for partition strategy and count.
 
 ---
 
@@ -22,9 +22,10 @@ This project implements a **lightweight, workload-aware Partitioning Advisor** f
 - **Dataset**: Experiments use a tabular dataset (trip-record style) at multiple scales: 5MB, 50MB, 500MB, and 2GB. Data is partitioned in Hive by selected columns and stored in HDFS; the same data is used with Spark repartition for comparison.
 - **Environment**: A Docker-based cluster with one master node, two worker nodes, plus Hive metastore and Spark History Server. YARN manages resource allocation; HDFS holds the data. Jobs are submitted from the master via `spark-submit --master yarn`.
 
-### 2.3 Capstone Goal
+### 2.3 Problem and Goal
 
-- **Goal**: Deliver a **Partitioning Advisor** that, given workload (data size + query type), automatically suggests a partitioning strategy and configuration to reduce manual tuning.
+- **Problem**: Choosing between Hive partitioning and Spark repartitioning, and the partition count (e.g., 4, 16, 32), for different data sizes and query types is typically done by manual trial-and-error, which is time-consuming and hard to standardize across pipelines or teams.
+- **Goal**: Deliver a **Partitioning Advisor** that, given workload (data size + query type), automatically suggests a partitioning strategy and configuration, reducing manual tuning and providing a consistent, reproducible recommendation that can be wired into pipelines or used as decision support.
 
 ---
 

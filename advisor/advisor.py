@@ -19,7 +19,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Partitioning Advisor: recommend Hive vs Spark repartition by data size and query type."
     )
-    parser.add_argument("--data-size", "-s", required=True, help="Data size: 5mb, 50mb, 500mb, 5gb")
+    parser.add_argument("--data-size", "-s", required=True, help="Data size: 5mb, 50mb, 500mb")
     parser.add_argument("--query-type", "-q", required=True, choices=["aggregate", "join", "window"], help="Query type")
     parser.add_argument(
         "--objective", "-o",
