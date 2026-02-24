@@ -1,41 +1,41 @@
-# Advisor 规律与推荐规则摘要
+# Advisor Patterns and Recommendation Rules
 
-基于 `experiment_summary.csv` 与 CS 214 报告结论整理的规律，供 Advisor 说明与报告引用。
-
----
-
-## 1. 按数据规模的规律
-
-| 规模 | 建议倾向 | 说明 |
-|------|----------|------|
-| **5mb / 50mb** | 两者皆可，查表取最优 | Hive 与 Spark repartition 的 runtime 量级接近，实验中最优策略因 query 类型而异。 |
-| **500mb** | 视 query 类型而定 | Aggregate 上 repartition(4) 可能优于 Hive；Join/Window 接近或 Hive 略稳。以汇总表最小 runtime 为准。 |
-| **5gb（约 2GB）** | **优先 Hive** | 实验显示 Hive 约 8–12s，repartition 约 42–56s；Hive 约快 4–5 倍，I/O 与 shuffle 更少。 |
+Patterns derived from `experiment_summary.csv`, for Advisor explanation and report use.
 
 ---
 
-## 2. 按查询类型的规律
+## 1. By data scale
 
-| 查询类型 | 规律 |
-|----------|------|
-| **Join** | 对策略最敏感；数据大时 Hive 优势明显（分区剪裁、join key 共位，减少 shuffle）。 |
-| **Aggregate** | 中等规模下 repartition(4) 常有甜点；规模大时 Hive 更稳。 |
-| **Window** | 与 Aggregate 类似；大数据量时 Hive 更省资源与时间。 |
-
----
-
-## 3. 分区数（repartition 4/16/32）
-
-- **4**：小到中规模下常为甜点，调度与 shuffle 开销小；500mb aggregate 上常优于 16/32。
-- **16 / 32**：数据更大时与 4 接近或更慢；资源（CPU/内存）占用通常更高。
-- **结论**：不盲目加大分区数；Advisor 按汇总表取该 (data_size, query_type) 下 runtime（或 cpu/memory）最优的配置。
+| Scale          | Tendency              | Notes                                                                 |
+| -------------- | --------------------- | --------------------------------------------------------------------- |
+| **5mb / 50mb** | Either; lookup best   | Hive and Spark repartition runtimes are similar; best varies by query. |
+| **500mb**      | Depends on query type | repartition(4) often best for aggregate; join/window close or Hive better. Use min runtime in summary. |
+| **5gb (~2GB)** | **Prefer Hive**       | Hive ~8–12s, repartition ~42–56s; Hive ~4–5× faster, less I/O and shuffle. |
 
 ---
 
-## 4. Advisor 行为（V1 查表）
+## 2. By query type
 
-- 输入：`data_size`（5mb/50mb/500mb/5gb）、`query_type`（aggregate/join/window）、`objective`（runtime/cpu/memory）。
-- 逻辑：在 `experiment_summary.csv` 中筛选该组合，按 `objective` 取最优一行（runtime 最小 / max_cpu 最小 / max_memory 最小）。
-- 输出：推荐的 `strategy`（hive 或 spark_repartition）、`num_partitions`（若为 repartition）、`reason` 与对应行。
+| Query type  | Pattern                                                                 |
+| ----------- | ----------------------------------------------------------------------- |
+| **Join**    | Most sensitive to strategy; Hive wins at large scale (partition pruning, co-location, less shuffle). |
+| **Aggregate** | repartition(4) often a sweet spot at medium scale; Hive more stable at large scale. |
+| **Window**  | Similar to aggregate; Hive saves time and resources at large scale.     |
 
-上述规律与实验数据一致；具体推荐以汇总表为准，本摘要用于解释「为什么这样推荐」。
+---
+
+## 3. Partition count (repartition 4/16/32)
+
+- **4**: Often the sweet spot at small–medium scale; lower scheduling and shuffle cost; often best for 500mb aggregate vs 16/32.
+- **16 / 32**: At larger scale similar or slower than 4; usually higher CPU/memory use.
+- **Conclusion**: Do not blindly increase partitions; the Advisor picks the (data_size, query_type) row with best runtime (or cpu/memory) in the summary.
+
+---
+
+## 4. Advisor behavior (V1 lookup)
+
+- **Input**: `data_size` (5mb/50mb/500mb/5gb), `query_type` (aggregate/join/window), `objective` (runtime/cpu/memory).
+- **Logic**: Filter the summary by that combination, choose the best row by `objective` (min runtime / min max_cpu / min max_memory).
+- **Output**: Recommended `strategy` (hive or spark_repartition), `num_partitions` (if repartition), `reason`, and the corresponding row.
+
+These patterns match the experiment data; the actual recommendation is always from the summary table; this document explains why a given recommendation is made.

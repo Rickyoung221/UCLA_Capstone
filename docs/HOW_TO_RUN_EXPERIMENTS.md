@@ -1,47 +1,46 @@
-# 如何跑实验（补 500mb Join 16/32 等）
+# How to Run Experiments
 
-用于在 Docker 集群里跑任务、从 YARN 收集 runtime、更新 results 和汇总表。
-
----
-
-## 前提
-
-- Docker、Docker Compose 已安装，集群已构建并启动（见 [GETTING_STARTED.md](GETTING_STARTED.md)）。
-- HDFS 上已有对应数据（如 `/data/500mb.csv`），且路径与脚本中一致（如 `hdfs://master:8020/data/500mb.csv`）。
+Use this to run tasks in the Docker cluster, collect runtimes from YARN, and update results and the summary (e.g. to add 500mb Join 16/32).
 
 ---
 
-## 步骤一：启动集群
+## Prerequisites
+
+- Docker and Docker Compose installed; cluster built and started (see [GETTING_STARTED.md](GETTING_STARTED.md)).
+- Data on HDFS (e.g. `/data/500mb.csv`) and paths in scripts matching (e.g. `hdfs://master:8020/data/500mb.csv`).
+
+---
+
+## Step 1: Start the cluster
 
 ```bash
-cd /Users/rickyang/Documents/GitHub/UCLA_Capstone
+cd /path/to/UCLA_Capstone
 docker-compose up -d
 ```
 
-等所有容器 Running 后，用浏览器打开 http://localhost:8088（YARN）确认正常。
+When all containers are running, open http://localhost:8088 (YARN) in a browser to confirm.
 
 ---
 
-## 步骤二：把脚本和数据拷进 master 容器
+## Step 2: Copy scripts and data into the master container
 
-（若项目已通过 volume 挂载到容器内，可跳过拷贝脚本，只保证数据在 HDFS。）
+(If the project is already mounted in the container, you can skip copying scripts; ensure data is on HDFS.)
 
 ```bash
-# 查看 master 容器名（常见为 xxx-master-1）
+# Find the master container name (often xxx-master-1)
 docker ps
 
-# 把 500mb 目录和依赖拷进容器（按你的容器名改）
-docker cp 500mb <容器名>:/opt/
-docker cp partition <容器名>:/opt/
-# 若脚本里用 findspark，确保容器内已有；一般镜像里已带
+# Copy 500mb directory and dependencies (replace <container> with your container name)
+docker cp 500mb <container>:/opt/
+docker cp partition <container>:/opt/
 ```
 
-若 HDFS 上还没有 500mb 数据，需要先把本机 500mb.csv 拷进容器并 put 到 HDFS：
+If 500mb data is not on HDFS yet, copy the CSV into the container and put it on HDFS:
 
 ```bash
-docker cp /path/to/500mb.csv <容器名>:/tmp/
-docker exec -it <容器名> bash
-# 在容器内：
+docker cp /path/to/500mb.csv <container>:/tmp/
+docker exec -it <container> bash
+# Inside the container:
 hdfs dfs -mkdir -p /data
 hdfs dfs -put /tmp/500mb.csv /data/
 exit
@@ -49,72 +48,71 @@ exit
 
 ---
 
-## 步骤三：在 master 容器里跑任务
+## Step 3: Run tasks in the master container
 
-以补 **500mb Join Spark-16 / Spark-32** 为例：
+Example: adding **500mb Join Spark-16 / Spark-32**:
 
 ```bash
-docker exec -it <容器名> bash
-cd /opt/500mb   # 或你拷入的路径
+docker exec -it <container> bash
+cd /opt/500mb   # or wherever you copied
 
-# 跑 500mb Join 16 分区（应用名会显示为 Test500MB_ExternalJoin_16）
+# Run 500mb Join 16 partitions (application name will be Test500MB_Join_16 or similar)
 spark-submit --master yarn no-hive-task2_16.py
 
-# 跑完后同样跑 32 分区
+# Then 32 partitions
 spark-submit --master yarn no-hive-task2_32.py
 
 exit
 ```
 
-跑的时候可在 http://localhost:8088 看应用列表，记下 **Application ID** 和 **运行时间（秒）**。
+While running, check http://localhost:8088 for the application list; note **Application ID** and **runtime (seconds)**.
 
 ---
 
-## 步骤四：从 YARN / Spark History 记下 runtime
+## Step 4: Record runtime from YARN / Spark History
 
-- **YARN**：http://localhost:8088 → 点进刚跑完的 Application → 看 **Finished** 时间与 **Start** 时间，差即为 runtime（秒）；或看 Spark UI 里的 Duration。
-- **Spark History**：http://localhost:18080 → 找到对应应用（如 Test500MB_ExternalJoin_16）→ 记下 duration（秒）。
+- **YARN**: http://localhost:8088 → open the finished application → use **Finished** time minus **Start** time as runtime (seconds), or use Duration from the Spark UI.
+- **Spark History**: http://localhost:18080 → find the application (e.g. Test500MB_Join_16) → note duration (seconds).
 
-把两个数记下来，例如：
-- Test500MB_ExternalJoin_16 → **19.7** 秒  
-- Test500MB_ExternalJoin_32 → **19.9** 秒  
+Record the values, e.g.:
+- Test500MB_Join_16 → **19.7** s  
+- Test500MB_Join_32 → **19.9** s  
 
-（若你跑出来的数字不同，以实际为准。）
+(Use your actual numbers if different.)
 
 ---
 
-## 步骤五：更新 500mb_results.csv
+## Step 5: Update 500mb_results.csv
 
-在本机用编辑器打开 `stats_collection_tools/500mb_results.csv`，在表头一致的前提下新增两行（id 可写占位，name 和 runtime_seconds 必须正确）：
+On your machine, open `stats_collection_tools/500mb_results.csv` and add two rows (same header; id can be a placeholder; name and runtime_seconds must be correct):
 
 ```csv
 id,name,start_time,launch_time,finish_time,runtime_seconds
-...,Test500MB_ExternalJoin_16,,,.,<你记下的16的秒数>
-...,Test500MB_ExternalJoin_32,,,.,<你记下的32的秒数>
+...,Test500MB_Join_16,,,.,<your_16_seconds>
+...,Test500MB_Join_32,,,.,<your_32_seconds>
 ```
 
-保存。  
-（`build_summary.py` 已支持 **ExternalJoin** 名字，会当作 Join 汇总。）
+Save. (`build_summary.py` recognizes these names and will include them in the Join summary.)
 
 ---
 
-## 步骤六：重新生成汇总表和图
+## Step 6: Regenerate the summary and plot
 
-在本机项目根目录：
+From the project root on your machine:
 
 ```bash
 python3 advisor/scripts/build_summary.py
 python3 advisor/scripts/plot_runtime.py
 ```
 
-再打开 `advisor/experiment_summary.csv` 和 `advisor/scripts/runtime_comparison.png`，应能看到 500mb Join 的 Spark-16、Spark-32 数据与图中两根柱子。
+Open `advisor/experiment_summary.csv` and `advisor/scripts/runtime_comparison.png`; you should see 500mb Join Spark-16 and Spark-32 in the data and figure.
 
 ---
 
-## 其他规模 / 查询类型
+## Other scales / query types
 
-- **脚本位置**：`5mb/`、`50mb/`、`500mb/` 下分别有 `hive-task1/2/3.py`（Hive）和 `no-hive-task1/2/3_4|16|32.py`（Spark 4/16/32）。task1=aggregate，task2=join，task3=window。
-- **应用名**：若为 `Test*MB_Join_*` 或 `Test*MB_ExternalJoin_*`，汇总脚本都会识别为 join。
-- **results 文件**：对应写入 `stats_collection_tools/5mb_results.csv`、`50mb_results.csv`、`500mb_results.csv`，格式与现有行一致即可。
+- **Script locations**: Under `5mb/`, `50mb/`, `500mb/` there are `hive-task1/2/3.py` (Hive) and `no-hive-task1/2/3_4|16|32.py` (Spark 4/16/32). task1=aggregate, task2=join, task3=window.
+- **Application names**: If the name is `Test*MB_Join_*` (or equivalent), the summary script will treat it as join.
+- **Results files**: Write to `stats_collection_tools/5mb_results.csv`, `50mb_results.csv`, `500mb_results.csv` in the same format as existing rows.
 
-复现与命名规则详见 [EXPERIMENT_DESIGN.md](EXPERIMENT_DESIGN.md)。
+See [EXPERIMENT_DESIGN.md](EXPERIMENT_DESIGN.md) for reproduction and naming rules.

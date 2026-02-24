@@ -1,8 +1,7 @@
 # Capstone Report: Workload-Aware Partitioning Advisor
 
-**Author:** [Your name]  
-**Date:** [Submission date]  
-**Capstone / Course:** [e.g. UCLA Capstone]
+**Author:** Weikeng Yang
+**Date:** 3/1/2026
 
 ---
 
@@ -108,20 +107,20 @@ Full fields (including **max_cpu_pct** and **max_memory_mib**) are in `advisor/e
 
 With objective=runtime, the Advisor is evaluated on each (data_size, query_type) in the summary by comparing its recommendation to the true best row (same strategy and num_partitions counts as agreement). Running `python3 advisor/scripts/evaluate_advisor.py` yields **agreement rate 12/12 = 100.0%**. The table below shows, for each combination, the Advisor’s recommendation and the true best configuration; they match in every row.
 
-| data_size | query_type | Advisor recommendation      | True best                   | Match |
-| --------- | ---------- | --------------------------- | --------------------------- | ----- |
-| 500mb     | aggregate  | spark_repartition n=4       | spark_repartition n=4       | Yes   |
-| 500mb     | join       | spark_repartition n=16      | spark_repartition n=16       | Yes   |
-| 500mb     | window     | hive                        | hive                        | Yes   |
-| 50mb      | aggregate  | spark_repartition n=4       | spark_repartition n=4       | Yes   |
-| 50mb      | join       | spark_repartition n=4       | spark_repartition n=4       | Yes   |
-| 50mb      | window     | spark_repartition n=16      | spark_repartition n=16      | Yes   |
-| 5gb       | aggregate  | hive                        | hive                        | Yes   |
-| 5gb       | join       | hive                        | hive                        | Yes   |
-| 5gb       | window     | hive                        | hive                        | Yes   |
-| 5mb       | aggregate  | spark_repartition n=32      | spark_repartition n=32      | Yes   |
-| 5mb       | join       | spark_repartition n=4       | spark_repartition n=4       | Yes   |
-| 5mb       | window     | spark_repartition n=4       | spark_repartition n=4       | Yes   |
+| data_size | query_type | Advisor recommendation | True best              | Match |
+| --------- | ---------- | ---------------------- | ---------------------- | ----- |
+| 500mb     | aggregate  | spark_repartition n=4  | spark_repartition n=4  | Yes   |
+| 500mb     | join       | spark_repartition n=16 | spark_repartition n=16 | Yes   |
+| 500mb     | window     | hive                   | hive                   | Yes   |
+| 50mb      | aggregate  | spark_repartition n=4  | spark_repartition n=4  | Yes   |
+| 50mb      | join       | spark_repartition n=4  | spark_repartition n=4  | Yes   |
+| 50mb      | window     | spark_repartition n=16 | spark_repartition n=16 | Yes   |
+| 5gb       | aggregate  | hive                   | hive                   | Yes   |
+| 5gb       | join       | hive                   | hive                   | Yes   |
+| 5gb       | window     | hive                   | hive                   | Yes   |
+| 5mb       | aggregate  | spark_repartition n=32 | spark_repartition n=32 | Yes   |
+| 5mb       | join       | spark_repartition n=4  | spark_repartition n=4  | Yes   |
+| 5mb       | window     | spark_repartition n=4  | spark_repartition n=4  | Yes   |
 
 **Agreement rate: 12/12 = 100.0%**
 
