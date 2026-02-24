@@ -1,4 +1,7 @@
 id,name,start_time,launch_time,finish_time,runtime_seconds
+application_cs214_report,Test500MB_Join_4,,,.,20.84
+application_cs214_report,Test500MB_Join_16,,,.,19.72
+application_cs214_report,Test500MB_Join_32,,,.,19.89
 application_1741747991273_0049,Test500MB_Window_32,Wed Mar 12 02:12:36 -0700 2025,Wed Mar 12 02:12:36 -0700 2025,Wed Mar 12 02:13:05 -0700 2025,29.0
 application_1741747991273_0048,Test500MB_Window_16,Wed Mar 12 02:11:23 -0700 2025,Wed Mar 12 02:11:23 -0700 2025,Wed Mar 12 02:11:51 -0700 2025,28.0
 application_1741747991273_0047,Test500MB_Window_4,Wed Mar 12 02:10:14 -0700 2025,Wed Mar 12 02:10:14 -0700 2025,Wed Mar 12 02:10:43 -0700 2025,29.0

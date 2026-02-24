@@ -19,12 +19,12 @@ import csv
 from collections import defaultdict
 
 
-# Name pattern: Test5MB_Aggregate, Test50MB_Join_16, Test500MB_Window_32
-NAME_PATTERN = re.compile(r"^Test(\d+)(MB)_(Aggregate|Join|Window)(?:_(\d+))?$")
+# Name pattern: Test5MB_Aggregate, Test50MB_Join_16, Test500MB_ExternalJoin_16
+NAME_PATTERN = re.compile(r"^Test(\d+)(MB|GB)_(Aggregate|Join|Window|ExternalJoin)(?:_(\d+))?$", re.IGNORECASE)
 
-# Stats filename pattern: 5mb-hive-task-1, 50mb-no-hive-task-2-16
-STATS_FILE_PATTERN = re.compile(r"^(\d+mb)-hive-task-([123])\.csv$", re.IGNORECASE)
-STATS_FILE_PATTERN_NO_HIVE = re.compile(r"^(\d+mb)-no-hive-task-([123])-(\d+)\.csv$", re.IGNORECASE)
+# Stats filename pattern (basename without .csv): 5mb-hive-task-1, 50mb-no-hive-task-2-16, 5gb-hive-task-1
+STATS_FILE_PATTERN = re.compile(r"^(\d+(?:mb|gb))-hive-task-([123])$", re.IGNORECASE)
+STATS_FILE_PATTERN_NO_HIVE = re.compile(r"^(\d+(?:mb|gb))-no-hive-task-([123])-(\d+)$", re.IGNORECASE)
 
 QUERY_MAP = {"1": "aggregate", "2": "join", "3": "window"}
 
@@ -46,7 +46,9 @@ def parse_result_name(name):
     if not m:
         return None
     size_num, size_unit, qtype, num_part = m.group(1), m.group(2).lower(), m.group(3).lower(), m.group(4)
-    data_size = size_num + size_unit  # 5mb, 50mb, 500mb
+    if qtype == "externaljoin":
+        qtype = "join"
+    data_size = size_num + size_unit  # 5mb, 50mb, 500mb, 5gb
     if num_part is not None:
         return data_size, qtype, "spark_repartition", int(num_part)
     return data_size, qtype, "hive", None
@@ -56,7 +58,7 @@ def collect_runtime_rows(project_root):
     """Collect (data_size, query_type, strategy, num_partitions, runtime_seconds) from *_results.csv."""
     stats_dir = os.path.join(project_root, "stats_collection_tools")
     rows = []
-    for f in ["5mb_results.csv", "50mb_results.csv", "500mb_results.csv"]:
+    for f in ["5mb_results.csv", "50mb_results.csv", "500mb_results.csv", "5gb_results.csv"]:
         path = os.path.join(stats_dir, f)
         if not os.path.isfile(path):
             continue

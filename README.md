@@ -9,17 +9,18 @@
 * [Spark 3.5.3](https://spark.apache.org/)
 
 ## Quick Start
-First build the image for each container:
-```
+First build the image for each container (must build `base` first; use `--no-cache` if you changed base or hit JAVA_HOME/arch issues):
+```bash
 docker build -t hadoop-hive-spark-base ./base
 docker build -t hadoop-hive-spark-master ./master
 docker build -t hadoop-hive-spark-worker ./worker
 docker build -t hadoop-hive-spark-history ./history
 ```
-To start the container
+To start the container:
+```bash
+docker compose up -d
 ```
-docker-compose up
-```
+(Or `docker-compose up` if you use the legacy compose.)
 ## Load data into HDFS
 Start from the master container, and move the data to the master container by the ```docker cp``` command.
 
@@ -47,13 +48,32 @@ Use the file [monitor.ps1](monitor.ps1) outside of docker
 
 ## Capstone: Partitioning Advisor
 
-本项目延伸为 workload-aware 的 partitioning 建议器：根据数据规模与查询类型推荐 Hive 分区或 Spark repartition 及 partition 数。
+This project implements a **lightweight, workload-aware Partitioning Advisor** on top of a Spark–Hive benchmark (Hive partition vs Spark repartition): given data size and query type, it recommends Hive partitioning or Spark repartition and partition count. Goals and scope: [docs/PROJECT_GOALS.md](docs/PROJECT_GOALS.md).
 
-- **生成实验汇总表**（供 Advisor 使用）：在项目根目录执行  
-  `python3 advisor/scripts/build_summary.py`  
-  输出为 `advisor/experiment_summary.csv`。
-- 实验设计、汇总表含义与复现方法见 [docs/EXPERIMENT_DESIGN.md](docs/EXPERIMENT_DESIGN.md)。
-- Advisor 目录说明见 [advisor/README.md](advisor/README.md)。
+### How to use the Advisor
+
+1. **Build the experiment summary** (once, or after updating data). From the project root:
+   ```bash
+   python3 advisor/scripts/build_summary.py
+   ```
+   Output: `advisor/experiment_summary.csv`.
+
+2. **Get a recommendation**. From the project root, e.g.:
+   ```bash
+   python3 advisor/advisor.py --data-size 50mb --query-type join
+   python3 advisor/advisor.py -s 500mb -q aggregate -v   # -v shows runtime/cpu/memory details
+   ```
+   - `--data-size` / `-s`: 5mb, 50mb, 500mb, 5gb  
+   - `--query-type` / `-q`: aggregate, join, window  
+   - `--objective` / `-o`: runtime (default), cpu, memory  
+
+For more (Python API, evaluation script, runtime plot), see **[advisor/README.md](advisor/README.md)**.
+
+### Documentation
+
+- **Capstone report**: [docs/Capstone_Report.md](docs/Capstone_Report.md)
+- Experiment design and summary schema: [docs/EXPERIMENT_DESIGN.md](docs/EXPERIMENT_DESIGN.md)
+- Advisor design: [docs/ADVISOR_DESIGN.md](docs/ADVISOR_DESIGN.md)
 
 ## Access interfaces with the following URL
 
@@ -80,5 +100,4 @@ worker2: http://localhost:8082
 history: http://localhost:18080
 
 ##### Hive
-URI: jdbc:hive2://localhost:10000# UCLA_Capstone
-# UCLA_Capstone
+URI: jdbc:hive2://localhost:10000
