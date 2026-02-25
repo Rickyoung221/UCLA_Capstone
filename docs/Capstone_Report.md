@@ -1,7 +1,8 @@
 # Capstone Report: Workload-Aware Partitioning Advisor
 
 **Author:** Weikeng Yang
-**Date:** 3/1/2026
+
+**Submit Date:**
 
 ---
 
