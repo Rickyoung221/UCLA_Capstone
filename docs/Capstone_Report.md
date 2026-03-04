@@ -32,6 +32,57 @@ Choosing partition strategy and count for Spark–Hive workloads is often done b
 
 ## 3. Method: Advisor Design
 
+### 3.1 Design Approach
+
+The core idea is **empirical lookup**: first run a controlled set of experiments (all combinations of data size, query type, and partitioning strategy), record runtime and resource metrics, and build a summary table of the best configuration per (data_size, query_type) and per objective; then, at recommendation time, the Advisor simply looks up that table for the user’s (data_size, query_type) and objective and returns the corresponding strategy and partition count. There is no SQL parsing or cost model—the “model” is the experiment summary itself. This keeps the system simple, interpretable, and directly grounded in measured data.
+
+The design has two phases:
+
+1. **Experiment phase**: Run Spark–Hive jobs for each (data_size, query_type, strategy, num_partitions); collect runtimes and optional CPU/memory; aggregate into one row per (data_size, query_type, strategy, num_partitions) with minimum runtime and max CPU/memory; then, for each (data_size, query_type), identify the best row per objective (e.g. minimum runtime) and store the result in a summary table.
+2. **Recommendation phase**: Given user input (data_size, query_type, objective), filter the summary to that (data_size, query_type), select the best row by the chosen objective, and return that row’s strategy and num_partitions (and reason).
+
+The following diagram illustrates the overall flow from workload input to recommendation output, and how the summary table is produced from raw experiment data.
+
+```mermaid
+flowchart LR
+  subgraph Input
+    A[data_size\nquery_type\nobjective]
+  end
+  subgraph Summary
+    T[(experiment_summary.csv)]
+  end
+  subgraph Output
+    R[strategy\nnum_partitions\nreason]
+  end
+  A --> T
+  T --> R
+```
+
+_Figure: Recommendation flow: user input → lookup in experiment summary → recommended strategy and partition count._
+
+The next diagram shows how the summary table is built from experiments (one-time / batch) and then used when serving a recommendation (each time the user runs the Advisor).
+
+```mermaid
+flowchart TB
+  subgraph Batch["Batch: build summary (one-time or when new data is added)"]
+    E[Run experiments\n(data_size × query_type × strategy × num_partitions)]
+    E --> C[Collect runtime & resource metrics]
+    C --> B[build_summary.py]
+    B --> S[(experiment_summary.csv)]
+  end
+  subgraph AtRecommendation["At recommendation time (each Advisor run)"]
+    I[User: data_size, query_type, objective]
+    I --> L[Filter summary by data_size, query_type]
+    L --> P[Pick best row by objective]
+    P --> O[Return strategy, num_partitions, reason]
+  end
+  S --> L
+```
+
+_Figure: Batch phase (experiments → summary table) and recommendation-time phase (user input → lookup → recommendation). The project implements both: experiments and build_summary produce the table; the CLI and recommend() use it to answer each request._
+
+### 3.2 Input, Output, and Lookup Logic
+
 - **Input**: `data_size` (5mb / 50mb / 500mb / 2gb), `query_type` (aggregate / join / window), `objective` (runtime / cpu / memory; default runtime).
 - **Output**: Recommended `strategy` (hive or spark_repartition), `num_partitions` (4/16/32 when repartition), `reason`, and the corresponding summary row.
 - **Logic**: From `experiment_summary.csv`, filter by (data_size, query_type), choose the best row by `objective` (minimum runtime / min max_cpu / min max_memory), and return that row’s strategy and configuration.
@@ -59,10 +110,22 @@ Recommendation:
 
 ## 5. Experiments and Data
 
+### 5.0 Research Question, Hypothesis, and Methodology
+
+- **Research question**: (1) Does the choice of partitioning strategy (Hive vs Spark repartition) and partition count (4, 16, 32) significantly affect runtime and resource usage for different data sizes and query types? (2) Can a lightweight Advisor that uses a lookup over an experiment summary correctly recommend the best configuration for each (data_size, query_type)?
+
+- **Hypothesis**: Runtime and resource usage depend on data size, query type, and (strategy, num_partitions); for each (data_size, query_type) there exists a best configuration in our experiment grid; and a rule-based lookup over a summary of that grid can replicate that best choice and thus serve as a usable Advisor.
+
+- **Why this methodology**: To answer whether strategy and partition count matter, we need **controlled experiments** that vary only those factors while keeping data, query logic, and cluster fixed. So we run all combinations of data size (5mb, 50mb, 500mb, 2gb), query type (aggregate, join, window), and configuration (Hive, Spark-4, Spark-16, Spark-32), measure runtime (and optionally CPU/memory), and record the best per (data_size, query_type) and per objective. This gives us a ground-truth table. To turn it into an Advisor, we use **lookup**: for any user (data_size, query_type, objective), we return the row that minimizes the chosen metric. This methodology is appropriate because (a) the research question is empirical—“which configuration is best?”—so we must measure, not only reason from first principles; (b) the Advisor’s job is to surface that best configuration, so a lookup over the measured summary is a direct and interpretable design; (c) the same summary supports evaluation (compare Advisor output to true best) and visualization (e.g. runtime comparison plots).
+
+---
+
+### 5.1 Summary Table and Data Source
+
 - **Summary table**: `advisor/experiment_summary.csv`, with columns data_size, query_type, strategy, num_partitions, runtime_seconds, max_cpu_pct, max_memory_mib, covering 5mb / 50mb / 500mb / 2gb × aggregate / join / window × hive and spark_repartition(4/16/32).
 - **Data source and limitations**: Parts of 500mb runtime (e.g. join 4/16/32) use values from the same source for comparability; the rest and 5mb/50mb runtimes come from project runs.
 
-### 5.1 Runtime Comparison (Hive vs Spark repartition)
+### 5.2 Runtime Comparison (Hive vs Spark repartition)
 
 The figure below is generated by `advisor/scripts/plot_runtime.py` from `experiment_summary.csv`. It shows runtime (seconds) for Hive and Spark repartition(4/16/32) across data sizes (5mb, 50mb, 500mb, 2gb) for each query type (Aggregate, Join, Window).
 
@@ -70,7 +133,7 @@ The figure below is generated by `advisor/scripts/plot_runtime.py` from `experim
 
 _Figure 1: Runtime by strategy (Hive vs Spark repartition). Left: Aggregate; center: Join; right: Window._
 
-### 5.2 Experiment Summary Data (runtime, seconds)
+### 5.3 Experiment Summary Data (runtime, seconds)
 
 The tables below give **runtime_seconds** from the summary table, matching the figure.
 
